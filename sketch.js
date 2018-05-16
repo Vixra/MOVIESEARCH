@@ -35,6 +35,8 @@ var desc;
 var input;
 var input2;
 var input3;
+var url1;
+var JSONgen;
 /*
 LIFE CYCLE METHODS
 */
@@ -52,7 +54,7 @@ function setup() {
   var button4 = select("#searchPopular");
   button.mousePressed(actorInfo);
   button2.mousePressed(movieInfo);
-  //button3.mousePressed(genreInfo);
+  button3.mousePressed(genreInfo);
   button4.mousePressed(popInfo);
 }
 
@@ -94,22 +96,40 @@ function popInfo(){
   loadJSON(urlPop, gotPop);
 }
 
-/*function genreInfo() {
+function genreInfo() {
   genValue = input3.value();
   var urlRef = "movieGenre.json";
   loadJSON(urlRef, gotRef);
 }
 
 function gotRef(dataGen) {
-  print(gotRef);
   dataMDBG = dataGen;
+
   if (dataMDBG) {
-    var url1 = "dataMDBG.results[0]."
-    var url2 =  url1+"genValue";
-    print(url2);
+    var url = dataMDBG.results[0].Thriller;
+    url1 = dataMDBG.results[0][genValue];
+    print(url1);
+  }
+  
+  var urlGen = apiGenre + apiKey + "&with_genres=" + url1;
+  loadJSON(urlGen, finallyGen);
+}
+
+function finallyGen(genJSON){
+  JSONgen=genJSON;
+  //print(JSONgen);
+  if (JSONgen){
+    var randomResults = floor(random(0,19));
+    var urlFinallyGen = JSONgen.results[randomResults].poster_path;
+    urlProfilePic = "https://image.tmdb.org/t/p/w300" + urlFinallyGen;
+    loadImage(urlProfilePic, gotPic);
+    desc = JSONgen.results[randomResults].release_date;
+    acName =JSONgen.results[randomResults].title + " Released: " + desc;
   }
 }
-*/
+
+
+
 function gotPop(dataPop){
   dataMDBP = dataPop;
   if (dataMDBP){
